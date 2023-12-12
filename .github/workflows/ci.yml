@@ -4,12 +4,12 @@ on:
     push:
       branches: [main]
       paths:
-        - "**.v"
+        - "**.rs"
         - ".github/workflows/ci.yml"
     pull_request:
       branches: [main]
       paths:
-        - "**.v"
+        - "**.rs"
         - ".github/workflows/ci.yml"
     release:
       types: [created]
