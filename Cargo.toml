@@ -1,6 +1,6 @@
 [package]
 name = "sat-rs"
-version = "0.0.2"
+version = "0.0.3"
 license = "MIT"
 description = "A SAT solver written in Rust"
 
