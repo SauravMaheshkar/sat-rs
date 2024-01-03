@@ -1,26 +1,50 @@
-use std::io;
-use std::io::Read;
-
-use notation::problem::Problem;
+extern crate clap;
+use clap::Parser;
 
 mod notation;
-mod parser;
+mod cnfparser;
+mod solvers;
+mod utils;
 
-use parser::cnfparser;
+use utils::read_file;
+use solvers::syntactic::syntactic_algorithm;
 
-fn main() {
+#[derive(Parser)]
+struct Cli {
+    // The path to the CNF file
+    path: std::path::PathBuf,
+
+    // which solver to use
+    #[clap(short, long, default_value = "syntactic")]
+    solver: String,
+}
+
+fn main(){
     // SAT Solver written in Rust
-    // Usage: cat problem.cnf | ./sat
+    // Usage: ./sat-rs <CNF_FILE> <SOLVER>
 
-    // Read from stdin
-    let mut buffer = String::new();
-    io::stdin().read_to_string(&mut buffer).unwrap();
+    let args = Cli::parse();
 
-    // Print the contents of the file
-    println!("{}", buffer);
+    // Check file extension
+    let extension = args.path.extension().unwrap_or_default().to_str().unwrap_or_default();
+    if extension != "cnf" {
+        panic!("File extension must be .cnf");
+    }
 
-    let _prob: Problem = cnfparser::parse_cnf(&buffer);
+    let buffer: String = read_file(&args.path);
 
-    // Parse the problem
-    // let _problem = parse(&problem);
+    // Parse the CNF file
+    let formula = cnfparser::parse_cnf(&buffer);
+
+    if args.solver == "syntactic" {
+        println!("Using syntactic solver");
+
+        match syntactic_algorithm(formula.unwrap()){
+            Ok(value) => println!("Value: {}", value),
+            Err(why) => panic!("Error: {}", why),
+        };
+
+    } else {
+        panic!("Unknown solver: {}", args.solver);
+    }
 }
