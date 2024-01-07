@@ -1,5 +1,7 @@
 # SAT Solvers in Rust
 
+[![built with nix](https://builtwithnix.org/badge.svg)](https://builtwithnix.org)
+
 This crate contains implementations of various satisfiability solvers for the boolean satisfiability problem (SAT).
 
 # Usage
