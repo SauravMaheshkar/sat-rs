@@ -29,33 +29,7 @@ use std::{collections::HashMap, io::Error};
 /// # Returns
 /// * `Ok(bool)` - If the formula is satisfiable, returns `Ok(true)`, otherwise `Ok(false)`
 /// * `Err(Error)` - If an error occurs, returns `Err(Error)`
-///
-/// # Examples
-/// Assuming the CNF file is in `/bin/problem.cnf` and contains the following:
-/// ```;
-/// p cnf 3 1
-/// 1 -3 0
-/// 2 3 -1 0
-/// ```
-///
-/// ```rust
-/// use sat_rs::cnfparser;
-/// use std::collections::HashMap;
-///
-/// let buffer = include_str!("bin/problem.cnf");
-/// let mut formula = cnfparser::parse_cnf(&buffer);
-///
-/// let mut interpretation: HashMap<i32, bool> = HashMap::new();
-/// interpretation.insert(1, false);
-/// interpretation.insert(2, false);
-/// interpretation.insert(3, false);
-///
-/// assert_eq!(formula.unwrap().evaluate(&interpretation), true);
-/// ```
-pub fn syntactic_algorithm(formula: Formula) -> Result<bool, Error>{
-    // Create a mutable copy of the formula
-    let mut _formula = formula.clone();
-
+pub fn interactive_algorithm(formula: &mut Formula) -> Result<bool, Error>{
     // Ask for an interpretation
     let mut interpretation: HashMap<i32, bool> = HashMap::new();
 
@@ -67,29 +41,8 @@ pub fn syntactic_algorithm(formula: Formula) -> Result<bool, Error>{
         interpretation.insert(*literal, input);
     }
 
-    for clause in &mut _formula.clauses {
-        for literal in &mut clause.literals {
-            if interpretation.contains_key(&literal.value) {
-                if interpretation[&literal.value] {
-                    literal.negated = false;
-                } else {
-                    literal.negated = true;
-                }
-            }
-        }
-    }
+    // Evaluate formula based on the interpretation
+    let value = formula.evaluate(&interpretation);
 
-    let mut value: bool = true;
-
-    for clause in &mut _formula.clauses {
-        let mut _clausal_value: bool = true;
-        for literal in &mut clause.literals {
-            if literal.negated {
-               _clausal_value = false;
-            }
-        }
-        value = value && _clausal_value;
-    }
-
-    Ok(value)
+    return Ok(value);
 }

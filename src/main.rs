@@ -7,7 +7,7 @@ mod solvers;
 mod utils;
 
 use utils::read_file;
-use solvers::syntactic::syntactic_algorithm;
+use solvers::interactive::interactive_algorithm;
 
 #[derive(Parser)]
 struct Cli {
@@ -15,7 +15,7 @@ struct Cli {
     path: std::path::PathBuf,
 
     // which solver to use
-    #[clap(short, long, default_value = "syntactic")]
+    #[clap(short, long, default_value = "interactive")]
     solver: String,
 }
 
@@ -28,7 +28,7 @@ fn main(){
     // Check file extension
     let extension = args.path.extension().unwrap_or_default().to_str().unwrap_or_default();
     if extension != "cnf" {
-        panic!("File extension must be .cnf");
+        panic!("File extension must be .cnf, got: {}", extension);
     }
 
     let buffer: String = read_file(&args.path);
@@ -36,10 +36,10 @@ fn main(){
     // Parse the CNF file
     let formula = cnfparser::parse_cnf(&buffer);
 
-    if args.solver == "syntactic" {
-        println!("Using syntactic solver");
+    if args.solver == "interactive" {
+        println!("Using interactive solver");
 
-        match syntactic_algorithm(formula.unwrap()){
+        match interactive_algorithm(&mut formula.unwrap()){
             Ok(value) => println!("Value: {}", value),
             Err(why) => panic!("Error: {}", why),
         };

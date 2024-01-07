@@ -4,5 +4,5 @@
 //!
 //! ## Available solvers
 //!
-//! * [`syntactic`] - A purely syntactic solver
-pub mod syntactic;
+//! * [`interactive`] - A purely syntactic solver based on user provided input.
+pub mod interactive;

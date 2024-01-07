@@ -2,7 +2,7 @@
 //! This crate contains implementations of various satisfiability solvers for the boolean satisfiability problem (SAT).
 //!
 //! List of available solvers:
-//! * [`crate::solvers::syntactic`] - A purely syntactic solver based on a user provided interpretation
+//! * [`crate::solvers::interactive`] - A purely syntactic solver based on user provided input.
 //!
 //! This crate also contains some useful structs for working with propositional variables and formulas, viz:
 //! * [`crate::notation::Formula`] - A struct for working with propositional formulas

@@ -176,23 +176,30 @@ impl Formula {
     /// ```
     pub fn evaluate(&mut self, interpretation: &HashMap<i32, bool>) -> bool {
         let mut value: bool = true;
-        for clause in &mut self.clauses {
-            let mut clause_value: bool = false;
-            for literal in &mut clause.literals {
-                let mut literal_value: bool = false;
+
+        // Set boolean values for literals from the interpretation
+        for clause in &mut self.clauses{
+            for literal in &mut clause.literals{
                 if interpretation.contains_key(&literal.value) {
-                    literal_value = interpretation[&literal.value];
-                }
-                if literal.negated {
-                    literal_value = !literal_value;
-                }
-                if literal_value {
-                    clause_value = true;
-                    break;
+                    if interpretation[&literal.value] {
+                        literal.negated = false;
+                    } else {
+                        literal.negated = true;
+                    }
                 }
             }
-            value = value && clause_value;
         }
+
+        for clause in &mut self.clauses{
+            let mut _clausal_value: bool = true;
+            for literal in &mut clause.literals{
+                if literal.negated {
+                    _clausal_value = false;
+                }
+            }
+            value = value && _clausal_value;
+        }
+
         value
     }
 }
