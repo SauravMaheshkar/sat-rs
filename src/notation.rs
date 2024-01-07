@@ -139,7 +139,6 @@ impl Formula {
         }
     }
 
-    #[allow(dead_code)]
     /// Evaluates a [`Formula`] given an interpretation
     ///
     /// # Arguments
@@ -154,18 +153,26 @@ impl Formula {
     /// ```
     ///
     /// ```rust
-    /// use sat_rs::cnfparser;
+    /// use sat_rs::notation::Formula;
+    /// use sat_rs::notation::Clause;
+    /// use sat_rs::notation::Literal;
     /// use std::collections::HashMap;
     ///
-    /// let buffer = include_str!("bin/problem.cnf");
-    /// let mut formula = cnfparser::parse_cnf(&buffer);
+    /// let mut clause = Clause::new();
+    /// let p = Literal{ value: 1, negated: false};
+    /// clause.literals.push(p);
+    ///
+    /// let mut formula = Formula {
+    ///   clauses: vec![clause],
+    ///   literals: vec![1],
+    ///   num_clauses: 1,
+    ///   num_vars: 1,
+    /// };
     ///
     /// let mut interpretation: HashMap<i32, bool> = HashMap::new();
-    /// interpretation.insert(1, false);
-    /// interpretation.insert(2, false);
-    /// interpretation.insert(3, false);
+    /// interpretation.insert(1, true);
     ///
-    /// assert_eq!(formula.unwrap().evaluate(&interpretation), true);
+    /// assert_eq!(formula.evaluate(&interpretation), true);
     /// ```
     pub fn evaluate(&mut self, interpretation: &HashMap<i32, bool>) -> bool {
         let mut value: bool = true;

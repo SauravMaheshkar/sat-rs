@@ -10,15 +10,6 @@ use crate::notation::Formula;
 ///
 /// # Arguments
 /// * `_buffer` - A string slice that holds the contents of the CNF file
-///
-/// # Examples
-/// If the CNF file is in `/bin/problem.cnf`:
-/// ```rust
-/// use sat_rs::cnfparser::parse_cnf;
-///
-/// let buffer = include_str!("bin/problem.cnf");
-/// let formula = parse_cnf(&buffer);
-/// ```
 pub fn parse_cnf(_buffer: &str) -> Result<Formula, String> {
     let mut num_clauses: i32 = 0;
     let mut num_vars: i32 = 0;
