@@ -19,7 +19,8 @@ sat-rs <CNF_FILE> <SOLVER>
 Available implementations:
 
 * `CHOAS`: A purely random algorithm (appropriately named) which generates random interpretations and checks if the formula evaluates to true.
-* `WSAT`: A pseudo-random algorithm which generates interpretations and if the formula evaluates to false, flips a random variable from some unsatisfied clause and repeats this process until it finds a satisfying implementation.
+* `WSAT`: A pseudo-random algorithm which generates random interpretations and if the formula evaluates to false, flips a random variable from some unsatisfied clause and repeats this process until it finds a satisfying implementation.
+* `GSAT`: A pseudo-random algorithm which generates random interpretations and if the formula evaluates to false, flips a variable which satisfies the maximum number of unsatisfied clauses and repeats this process until it finds a satisfying implementation.
 
 ## References
 
