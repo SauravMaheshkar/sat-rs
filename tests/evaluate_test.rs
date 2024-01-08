@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use sat_rs::cnfparser;
 
 #[test]
-fn test_parse_cnf() {
+fn test_evaluate() {
     // Create a buffer of type &str using file at bin/problem.cnf
     let buffer = include_str!("../bin/problem.cnf");
 
