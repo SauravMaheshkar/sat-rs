@@ -269,4 +269,41 @@ impl Formula {
         }
         return value;
     }
+
+    /// Returns a vector of unsatisfied clauses
+    ///
+    /// This is intended to be used after the formula has been evaluated
+    ///
+    /// # Returns
+    /// * [`Vec<Clause>`] - A vector of unsatisfied clauses
+    pub fn get_unsatisfied_clauses(&mut self) -> Vec<Clause> {
+        let mut unsatisfied_clauses: Vec<Clause> = Vec::new();
+        for clause in &self.clauses {
+            if !clause.is_satisfied {
+                unsatisfied_clauses.push(clause.clone());
+            }
+        }
+        return unsatisfied_clauses;
+    }
+
+    /// Returns a vector of variables in a clause
+    ///
+    /// # Arguments
+    /// * `clause` - A [`Clause`] struct
+    ///
+    /// # Returns
+    /// * [`Vec<i32>`] - A vector of variables in the clause
+    pub fn get_clausal_variables(&mut self, clause: &Clause) -> Vec<i32> {
+        let mut clausal_variables: Vec<i32> = Vec::new();
+
+        for var in &self.vars {
+            for literal in &clause.literals {
+                if literal.value == *var {
+                    clausal_variables.push(*var);
+                }
+            }
+        }
+
+        return clausal_variables;
+    }
 }
