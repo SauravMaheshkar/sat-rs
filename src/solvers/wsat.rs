@@ -90,28 +90,12 @@ pub fn wsat_algorithm(formula: &mut Formula, max_tries: u32, max_flips: u32) -> 
             return value;
         } else {
             for _ in 0..max_flips {
-                // Collect unsatisfied clauses
-                let mut unsatisfied_clauses: Vec<Clause> = Vec::new();
-                for clause in &formula.clauses {
-                    if !clause.is_satisfied {
-                        unsatisfied_clauses.push(clause.clone());
-                    }
-                }
-
                 // Randomly select a clause that is not satisfied by the interpretation
+                let unsatisfied_clauses: Vec<Clause> = formula.get_unsatisfied_clauses();
                 let clause = unsatisfied_clauses.choose(&mut rand::thread_rng());
 
                 // Randomly select a variable from the clause
-                let mut clausal_variables: Vec<i32> = Vec::new();
-
-                for var in &formula.vars {
-                    for literal in &clause.unwrap().literals {
-                        if literal.value == *var {
-                            clausal_variables.push(*var);
-                        }
-                    }
-                }
-
+                let clausal_variables: Vec<i32> = formula.get_clausal_variables(&clause.unwrap());
                 let variable = clausal_variables[rand::random::<usize>() % clausal_variables.len()];
 
                 interpretation = flip(&mut interpretation, variable).clone();
