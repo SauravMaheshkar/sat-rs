@@ -70,7 +70,7 @@ use std::collections::HashMap;
 /// assert_eq!(result, true);
 /// ```
 pub fn wsat_algorithm(formula: &mut Formula, max_tries: u32, max_flips: u32) -> bool {
-    let mut value: bool = true;
+    let mut value: bool = false;
 
     for _ in 0..max_tries {
         // Create a random interpretation
