@@ -1,5 +1,5 @@
-use notation::Formula;
-use std::{collections::HashMap, io::Error};
+use crate::notation::Formula;
+use std::collections::HashMap;
 
 /// Purely Syntactic Algorithm for evaluation of propostional formulas
 ///
@@ -27,22 +27,21 @@ use std::{collections::HashMap, io::Error};
 /// * `formula` - A [`Formula`] struct
 ///
 /// # Returns
-/// * `Ok(bool)` - If the formula is satisfiable, returns `Ok(true)`, otherwise `Ok(false)`
-/// * `Err(Error)` - If an error occurs, returns `Err(Error)`
-pub fn interactive_algorithm(formula: &mut Formula) -> Result<bool, Error>{
-    // Ask for an interpretation
+/// * `bool` - The value of the formula
+pub fn interactive_algorithm(formula: &mut Formula) -> bool {
     let mut interpretation: HashMap<i32, bool> = HashMap::new();
 
-    for literal in &formula.literals {
-        println!("Enter value for literal {} in the interpretation: ", literal);
+    for var in &formula.vars {
+        // Ask for an interpretation
+        println!("Enter value for variable {:?} in the interpretation: ", var);
         let mut input = String::new();
         std::io::stdin().read_line(&mut input).unwrap();
         let input: bool = input.trim().parse().unwrap();
-        interpretation.insert(*literal, input);
+        interpretation.insert(*var, input);
     }
 
     // Evaluate formula based on the interpretation
     let value = formula.evaluate(&interpretation);
 
-    return Ok(value);
+    return value;
 }
