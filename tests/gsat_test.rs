@@ -10,7 +10,10 @@ fn test_gsat() {
     let formula = cnfparser::parse_cnf(&buffer);
 
     // Check that the formula is unsatisfiable
-    let result: bool = gsat::gsat_algorithm(&mut formula.unwrap(), 10, 10);
+    let result: bool = gsat::gsat_algorithm(&mut formula.clone().unwrap(), 10, 10, None);
+    let result_with_walk_probability: bool =
+        gsat::gsat_algorithm(&mut formula.clone().unwrap(), 10, 10, Some(0.5));
 
     assert_eq!(result, false);
+    assert_eq!(result_with_walk_probability, false);
 }

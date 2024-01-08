@@ -1,3 +1,5 @@
+use rand::seq::SliceRandom;
+
 use crate::notation::{Clause, Formula};
 use crate::solvers::utils::flip;
 use std::collections::HashMap;
@@ -63,10 +65,15 @@ use std::collections::HashMap;
 ///    num_vars: 2,
 /// };
 ///
-/// let result = gsat::gsat_algorithm(&mut formula, 10, 10);
+/// let result = gsat::gsat_algorithm(&mut formula, 10, 10, None);
 /// assert_eq!(result, true);
 /// ```
-pub fn gsat_algorithm(formula: &mut Formula, max_tries: u32, max_flips: u32) -> bool {
+pub fn gsat_algorithm(
+    formula: &mut Formula,
+    max_tries: u32,
+    max_flips: u32,
+    walk_probability: Option<f32>,
+) -> bool {
     let mut value: bool = false;
 
     for _ in 0..max_tries {
@@ -88,12 +95,7 @@ pub fn gsat_algorithm(formula: &mut Formula, max_tries: u32, max_flips: u32) -> 
         } else {
             for _ in 0..max_flips {
                 // Collect unsatisfied clauses
-                let mut unsatisfied_clauses: Vec<Clause> = Vec::new();
-                for clause in &formula.clauses {
-                    if !clause.is_satisfied {
-                        unsatisfied_clauses.push(clause.clone());
-                    }
-                }
+                let unsatisfied_clauses: Vec<Clause> = formula.get_unsatisfied_clauses();
 
                 // Loop over all the unsatisfied clauses, and find the variable
                 // which upon flipping satisfies the maximum number of clauses
@@ -123,7 +125,24 @@ pub fn gsat_algorithm(formula: &mut Formula, max_tries: u32, max_flips: u32) -> 
                 }
 
                 // Flip the value of the variable
-                interpretation = flip(&mut interpretation, var_to_flip).clone();
+                if walk_probability == None {
+                    interpretation = flip(&mut interpretation, var_to_flip).clone();
+                } else {
+                    // flip the value of the variable with a probability walk_probability
+                    // and flip a random variable with probability 1 - walk_probabilityN
+                    let random_number: f32 = rand::random::<f32>();
+                    if random_number < walk_probability.unwrap() {
+                        interpretation = flip(&mut interpretation, var_to_flip).clone();
+                    } else {
+                        // Randomly select a clause that is not satisfied by the interpretation
+                        let clause = unsatisfied_clauses.choose(&mut rand::thread_rng());
+                        let clausal_variables: Vec<i32> =
+                            formula.get_clausal_variables(&clause.unwrap());
+                        let random_var =
+                            clausal_variables[rand::random::<usize>() % clausal_variables.len()];
+                        interpretation = flip(&mut interpretation, random_var).clone();
+                    }
+                }
 
                 // Check if the interpretation satisfies the formula
                 if formula.evaluate(&interpretation) {

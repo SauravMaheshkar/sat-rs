@@ -52,7 +52,7 @@ fn main() {
         "interactive" => interactive_algorithm(&mut formula.unwrap()),
         "chaos" => chaos_algorithm(&mut formula.unwrap(), 100),
         "wsat" => wsat_algorithm(&mut formula.unwrap(), 100, 100),
-        "gsat" => gsat_algorithm(&mut formula.unwrap(), 100, 100),
+        "gsat" => gsat_algorithm(&mut formula.unwrap(), 100, 100, None),
         &_ => panic!("Unknown solver: {}", args.solver),
     };
 
