@@ -2,7 +2,7 @@ use sat_rs::cnfparser;
 use sat_rs::solvers::chaos;
 
 #[test]
-fn test_parse_cnf() {
+fn test_chaos() {
     // Create a buffer of type &str using file at bin/unsatisfiable.cnf
     let buffer = include_str!("../bin/unsatisfiable.cnf");
 
