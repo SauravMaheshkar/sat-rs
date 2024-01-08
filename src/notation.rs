@@ -108,6 +108,7 @@ impl Literal {
 #[derive(Debug, Clone)]
 pub struct Clause {
     pub literals: Vec<Literal>,
+    pub is_satisfied: bool,
 }
 
 impl Clause {
@@ -122,6 +123,7 @@ impl Clause {
     pub fn new() -> Clause {
         Clause {
             literals: Vec::new(),
+            is_satisfied: false,
         }
     }
 
@@ -169,6 +171,12 @@ impl Clause {
                 clausal_value = clausal_value || literal.evaluate(interpretation[&literal.value]);
             }
         }
+
+        // If clause is satisfied, set is_satisfied to true
+        if clausal_value {
+            self.is_satisfied = true;
+        }
+
         return clausal_value;
     }
 }
