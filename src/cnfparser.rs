@@ -2,7 +2,7 @@
 //!
 //! parser for DIMACS CNF files, returns a [`Formula`] struct
 
-use crate::notation::{Literal, Clause, Formula};
+use crate::notation::{Clause, Formula, Literal};
 
 /// Parses a CNF file and returns a [`Formula`] struct
 ///
@@ -93,11 +93,11 @@ pub fn parse_cnf(_buffer: &str) -> Result<Formula, String> {
     assert_eq!(num_vars, vars.len() as i32);
 
     let formula: Formula = Formula {
-        clauses: clauses,
-        literals: literals,
-        vars: vars,
-        num_clauses: num_clauses,
-        num_vars: num_vars,
+        clauses,
+        literals,
+        vars,
+        num_clauses,
+        num_vars,
     };
 
     Ok(formula)

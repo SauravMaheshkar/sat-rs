@@ -57,7 +57,7 @@ impl Literal {
     #[allow(dead_code)]
     pub fn from_value(value: i32) -> Literal {
         return Literal {
-            value: value,
+            value,
             negated: false,
         };
     }
