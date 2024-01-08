@@ -8,3 +8,4 @@
 //! * [`chaos`] - A solver based on the chaos algorithm.
 pub mod chaos;
 pub mod interactive;
+pub mod utils;
