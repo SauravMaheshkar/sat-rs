@@ -1,5 +1,3 @@
-extern crate sat_rs;
-
 use sat_rs::cnfparser;
 
 #[test]

@@ -1,15 +1,16 @@
-extern crate clap;
 use clap::Parser;
+use clap_verbosity_flag::Verbosity;
 
-mod notation;
 mod cnfparser;
+mod notation;
 mod solvers;
 mod utils;
 
-use utils::read_file;
+use solvers::chaos::chaos_algorithm;
 use solvers::interactive::interactive_algorithm;
+use utils::read_file;
 
-#[derive(Parser)]
+#[derive(Parser, Debug)]
 struct Cli {
     // The path to the CNF file
     path: std::path::PathBuf,
@@ -17,16 +18,25 @@ struct Cli {
     // which solver to use
     #[clap(short, long, default_value = "interactive")]
     solver: String,
+
+    // verbosity level
+    #[command(flatten)]
+    verbosity: Verbosity,
 }
 
-fn main(){
+fn main() {
     // SAT Solver written in Rust
     // Usage: ./sat-rs <CNF_FILE> <SOLVER>
 
     let args = Cli::parse();
 
     // Check file extension
-    let extension = args.path.extension().unwrap_or_default().to_str().unwrap_or_default();
+    let extension = args
+        .path
+        .extension()
+        .unwrap_or_default()
+        .to_str()
+        .unwrap_or_default();
     if extension != "cnf" {
         panic!("File extension must be .cnf, got: {}", extension);
     }
@@ -36,15 +46,11 @@ fn main(){
     // Parse the CNF file
     let formula = cnfparser::parse_cnf(&buffer);
 
-    if args.solver == "interactive" {
-        println!("Using interactive solver");
+    let result = match args.solver.as_str() {
+        "interactive" => interactive_algorithm(&mut formula.unwrap()),
+        "chaos" => chaos_algorithm(&mut formula.unwrap(), 100),
+        &_ => panic!("Unknown solver: {}", args.solver),
+    };
 
-        match interactive_algorithm(&mut formula.unwrap()){
-            Ok(value) => println!("Value: {}", value),
-            Err(why) => panic!("Error: {}", why),
-        };
-
-    } else {
-        panic!("Unknown solver: {}", args.solver);
-    }
+    println!("Result: {}", result);
 }

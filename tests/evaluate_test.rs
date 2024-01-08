@@ -1,4 +1,3 @@
-extern crate sat_rs;
 use std::collections::HashMap;
 
 use sat_rs::cnfparser;
