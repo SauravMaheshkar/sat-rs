@@ -1,6 +1,7 @@
 name: "Rust Build and Tests"
 
 on:
+    workflow_dispatch:
     push:
       branches: [main]
       paths:
