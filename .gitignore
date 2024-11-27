@@ -1,3 +1,6 @@
 /target
 doc
 .vscode
+
+flake.lock
+
