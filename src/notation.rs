@@ -187,6 +187,7 @@ impl Clause {
 ///
 /// Contains a vector of [`Clause`]s, a vector of [`Literal`]s, a vector of variables, the number of clauses and the number of variables
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct Formula {
     pub clauses: Vec<Clause>,
     pub literals: Vec<Literal>,
@@ -225,7 +226,7 @@ impl Formula {
     ///
     /// # Examples
     /// Assuming the CNF file is in `/bin/problem.cnf` and contains the following:
-    /// ```;
+    /// ```custom,{class=language-bash}
     /// p cnf 3 1
     /// 1 -3 0
     /// 2 3 -1 0

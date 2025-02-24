@@ -1,7 +1,7 @@
-use rand::seq::SliceRandom;
-
 use crate::notation::{Clause, Formula};
 use crate::solvers::utils::flip;
+use rand::prelude::IndexedRandom;
+use rand::Rng;
 use std::collections::HashMap;
 
 /// WSAT Algorithm for evaluation of propostional formulas
@@ -92,11 +92,12 @@ pub fn wsat_algorithm(formula: &mut Formula, max_tries: u32, max_flips: u32) -> 
             for _ in 0..max_flips {
                 // Randomly select a clause that is not satisfied by the interpretation
                 let unsatisfied_clauses: Vec<Clause> = formula.get_unsatisfied_clauses();
-                let clause = unsatisfied_clauses.choose(&mut rand::thread_rng());
+                let clause = unsatisfied_clauses.choose(&mut rand::rng());
 
                 // Randomly select a variable from the clause
                 let clausal_variables: Vec<i32> = formula.get_clausal_variables(&clause.unwrap());
-                let variable = clausal_variables[rand::random::<usize>() % clausal_variables.len()];
+                let variable =
+                    clausal_variables[rand::rng().random_range(0..clausal_variables.len())];
 
                 interpretation = flip(&mut interpretation, variable).clone();
 
