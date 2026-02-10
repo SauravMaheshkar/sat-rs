@@ -6,11 +6,13 @@ on:
       branches: [main]
       paths:
         - "**.rs"
+        - "Cargo.toml"
         - ".github/workflows/ci.yml"
     pull_request:
       branches: [main]
       paths:
         - "**.rs"
+        - "Cargo.toml"
         - ".github/workflows/ci.yml"
     release:
       types: [created]
