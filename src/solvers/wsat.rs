@@ -1,7 +1,7 @@
 use crate::notation::{Clause, Formula};
 use crate::solvers::utils::flip;
 use rand::prelude::IndexedRandom;
-use rand::Rng;
+use rand::RngExt;
 use std::collections::HashMap;
 
 /// WSAT Algorithm for evaluation of propostional formulas
